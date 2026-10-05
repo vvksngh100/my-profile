@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --glass-bg: rgba(255, 255, 255, 0.9);
+    --glass-border: #e2e8f0;
+    --subtle-bg: #f1f5f9;
+    --shadow-tint: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Eye-friendly, ophthalmologist-recommended Dark Palette (Deep Slate, no stark blacks, no eye glare) */
+  html.dark {
+    --background: #0f172a; /* Tailwind Slate 900: restful dark slate, zero ocular strain */
+    --foreground: #e2e8f0; /* Tailwind Slate 200: soft off-white, eliminates glare and halation */
+    --card-bg: #1e293b;    /* Tailwind Slate 800: calm, natural elevation */
+    --card-border: #334155;/* Tailwind Slate 700: soft, distinct boundary without high contrast */
+    --glass-bg: rgba(30, 41, 59, 0.88);
+    --glass-border: rgba(148, 163, 184, 0.15);
+    --subtle-bg: #273549;  /* Soft elevated pill / input background */
+    --shadow-tint: rgba(0, 0, 0, 0.25);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Ergonomic custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Glass & Panel Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 16px -2px var(--shadow-tint);
+  transition: all 0.2s ease;
+}
+
+.glass-panel-glow {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px -4px var(--shadow-tint);
+  transition: all 0.2s ease;
+}
+
+.glow-gradient-text {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.dark .glow-gradient-text {
+  background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 50%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
