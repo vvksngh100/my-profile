@@ -19,6 +19,8 @@ export interface WorkExperience {
   period: string;
   isCurrent?: boolean;
   type?: "work" | "career-break";
+  logo?: string;
+  highlights?: { label: string; value: string }[];
   description: string[];
   skills: string[];
 }
@@ -154,6 +156,12 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
     period: "Oct 2025 – Jun 2026",
     isCurrent: true,
     type: "work",
+    logo: "/companies/sublime.jpg",
+    highlights: [
+      { label: "Accounts Served", value: "50+" },
+      { label: "Components Built", value: "20+" },
+      { label: "RBAC Security", value: "3 Tiers" },
+    ],
     description: [
       "Developed 20+ reusable React.js components for an enterprise digital signage platform supporting 50+ enterprise accounts.",
       "Implemented client-side Role-Based Access Control (RBAC) across 3 permission tiers to restrict unauthorized platform views.",
@@ -169,6 +177,11 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
     location: "Prayagraj, UP",
     period: "Feb 2025 – Sep 2025",
     type: "career-break",
+    highlights: [
+      { label: "Desktop Architecture", value: "Electron" },
+      { label: "Real-Time Telemetry", value: "WebSockets" },
+      { label: "Algorithms Focus", value: "Advanced" },
+    ],
     description: [
       "Took a career break to support family responsibilities and provide full-time care for my late father.",
       "Continued technical development during the break through advanced React.js, JavaScript, and Data Structures & Algorithms, while building an Energy Monitoring Desktop Application using Electron and React.js.",
@@ -182,6 +195,12 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
     location: "Thane, Mumbai, MH",
     period: "Apr 2022 – Jan 2025",
     type: "work",
+    logo: "/companies/sankey.png",
+    highlights: [
+      { label: "SQL Query Speedup", value: "50%" },
+      { label: "Concurrent Users", value: "200+" },
+      { label: "Daily Work Orders", value: "500+" },
+    ],
     description: [
       "Maintained and enhanced an enterprise Field Service Management platform supporting up to 200 concurrent users.",
       "Developed dynamic data tables with permission-driven controls, rendering 1,000+ data rows without lag and contributing to a 20% improvement in field-work-order dispatching.",
