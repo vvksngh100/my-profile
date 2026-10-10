@@ -68,7 +68,7 @@ export const PERSONAL_INFO = {
   title: "Frontend Developer & Full-Stack AI Engineer",
   roles: [
     "Frontend Developer",
-    "React.js & Next.js Specialist",
+    "React.js & Next.js Developer",
     "Full Stack Developer",
     "Local AI & RAG Engineer",
     "Performance Optimization Specialist",
@@ -326,43 +326,7 @@ export const PROJECTS: Project[] = [
       "Interactive multi-sensor telemetry dashboards and charts",
       "Normalized MySQL local relational schema for device-level time-series analytics",
     ],
-  },
-  {
-    id: "field-service-management",
-    title: "Enterprise Field Service Management System",
-    period: "2022 – 2025",
-    category: "Full Stack & Cloud",
-    tagline: "High-scale field operations suite supporting 200 concurrent users with 50% faster query execution.",
-    description:
-      "An enterprise Field Service Management platform supporting up to 200 concurrent users with lag-free tabular rendering and photographic task validation.",
-    keyPoints: [
-      "Maintained and enhanced an enterprise Field Service Management platform supporting up to 200 concurrent users.",
-      "Developed dynamic data tables with permission-driven controls, rendering 1,000+ data rows without lag and contributing to a 20% improvement in field-work-order dispatching.",
-      "Designed a validation algorithm requiring photographic proof for task completion, ensuring real-time verification for 500+ daily field work orders and reducing manual audit time by 30%.",
-      "Optimized complex SQL execution plans, joins and indexing, reducing query execution time by 50% and bringing load times from 10 seconds to 5 seconds.",
-    ],
-    techStack: [
-      "React.js",
-      "JavaScript (ES6+)",
-      "Node.js",
-      "MySQL",
-      "SQL Indexing",
-      "REST APIs",
-      "Dynamic Tables",
-    ],
-    metrics: [
-      { label: "Query Speedup", value: "50%" },
-      { label: "Daily Work Orders", value: "500+" },
-      { label: "Audit Time Cut", value: "30%" },
-      { label: "Data Rows Rendered", value: "1000+" },
-    ],
-    githubUrl: "https://github.com/vvksngh100",
-    architectureHighlights: [
-      "50% query time reduction by refactoring execution plans and redundant indexes",
-      "Virtual rendering for large 1,000+ row tabular datasets with permission controls",
-      "Photographic metadata verification algorithm for real-time dispatch audits",
-    ],
-  },
+  }
 ];
 
 export const EDUCATION_LIST: Education[] = [
@@ -386,6 +350,24 @@ export const EDUCATION_LIST: Education[] = [
     description:
       "Core curriculum in Computer Science: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems (DBMS), Operating Systems, and Computer Networks.",
   },
+  {
+    id: "class_12",
+    degree: 'Class XII',
+    institution: "Jawahar Navodaya Vidyalaya, Meja Khas",
+    location: "Meja Khas, Prayagraj, Uttar Pradesh, India",
+    period: "Jul 2013 – Jun 2014",
+    grade: "90.6%",
+    description: 'Core curriculum in Computer Science, Physics, Chemistry, Mathematics and English'
+  },
+  {
+    id: "class_10",
+    degree: "Class X",
+    institution: "Jawahar Navodaya Vidyalaya, Meja Khas",
+    location: "Meja Khas, Prayagraj, Uttar Pradesh, India",
+    period: "Jul 2011 – Jun 2012",
+    grade: "9.4 CGPA",
+    description: ""
+  }
 ];
 
 export const HONORS_AWARDS: Award[] = [

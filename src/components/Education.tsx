@@ -116,7 +116,7 @@ export default function Education() {
               <ScrollReveal direction="up" delay={0.25}>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-3">
                   <BookOpen className="w-5 h-5 text-sky-500" />
-                  <span>freeCodeCamp Certifications</span>
+                  <span>Certifications</span>
                 </h3>
               </ScrollReveal>
 
