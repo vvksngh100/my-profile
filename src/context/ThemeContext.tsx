@@ -13,19 +13,19 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Read saved theme from localStorage or default to dark
+    // Read saved theme from localStorage or default to light
     const savedTheme = localStorage.getItem("theme") as Theme | null;
     if (savedTheme === "light" || savedTheme === "dark") {
       setThemeState(savedTheme);
       applyTheme(savedTheme);
     } else {
-      // Default to dark mode for the cosmic signature look
-      setThemeState("dark");
-      applyTheme("dark");
+      // Default to light mode
+      setThemeState("light");
+      applyTheme("light");
     }
     setMounted(true);
   }, []);

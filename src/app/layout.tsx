@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
     { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -107,7 +107,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth dark`}
+      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth light`}
       suppressHydrationWarning
     >
       <head>
@@ -115,7 +115,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function() {
               try {
-                var theme = localStorage.getItem('theme') || 'dark';
+                var theme = localStorage.getItem('theme') || 'light';
                 document.documentElement.classList.remove('dark', 'light');
                 document.documentElement.classList.add(theme);
               } catch(e) {}

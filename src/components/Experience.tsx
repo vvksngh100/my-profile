@@ -12,6 +12,7 @@ import {
   Radio,
   Sparkles,
   Building2,
+  Briefcase,
 } from "lucide-react";
 import {
   SiReact,
@@ -51,6 +52,12 @@ export default function Experience() {
     return <Sparkles className="w-3.5 h-3.5 text-indigo-400" />;
   };
 
+  const getStepperIcon = (exp: (typeof WORK_EXPERIENCES)[number]) => {
+    if (exp.isCurrent) return <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-white" />;
+    if (exp.type === "career-break") return <HeartHandshake className="w-4 h-4 sm:w-5 sm:h-5 text-white" />;
+    return <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />;
+  };
+
   return (
     <section id="experience" className="py-24 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,7 +72,10 @@ export default function Experience() {
         </ScrollReveal>
 
         {/* Vertical Timeline with Elevated Cards */}
-        <div className="relative border-l-2 border-slate-200 dark:border-slate-700/80 ml-2 sm:ml-6 md:ml-8 pl-6 sm:pl-9 space-y-12">
+        <div className="relative pl-[52px] sm:pl-[76px] space-y-10 sm:space-y-12">
+          {/* Continuous Gradient Timeline Spine connecting between badges */}
+          <div className="absolute left-[18px] sm:left-[28px] -translate-x-1/2 top-10 sm:top-12 bottom-10 sm:bottom-12 w-[3px] bg-gradient-to-b from-indigo-500 via-amber-400 to-indigo-400 dark:to-slate-700 rounded-full pointer-events-none" />
+
           {WORK_EXPERIENCES.map((exp, idx) => {
             const isCareerBreak = exp.type === "career-break";
 
@@ -76,20 +86,39 @@ export default function Experience() {
                 delay={idx * 0.15}
                 className="relative group"
               >
-                {/* Timeline Pulse Node aligned with Logo */}
-                <div
-                  className={`absolute -left-[35px] sm:-left-[49px] top-6 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-4 flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-xs ${
-                    isCareerBreak
-                      ? "bg-white dark:bg-slate-900 border-amber-500/30"
-                      : "bg-white dark:bg-slate-900 border-indigo-600/30 dark:border-indigo-400/30"
-                  }`}
-                >
+                {/* Milestone Stepper Node */}
+                <div className="absolute left-[-52px] sm:left-[-76px] top-6 z-10 w-[36px] sm:w-[56px] flex items-center justify-center">
                   <div
-                    className={`w-2.5 h-2.5 rounded-full transition-transform group-hover:scale-125 ${
-                      isCareerBreak ? "bg-amber-500" : "bg-indigo-600 dark:bg-indigo-400"
+                    className={`relative w-9 h-9 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-md ${
+                      exp.isCurrent
+                        ? "bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-indigo-500/30 ring-4 ring-indigo-500/15"
+                        : isCareerBreak
+                        ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-amber-500/30 ring-4 ring-amber-500/15"
+                        : "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-200 dark:border-indigo-500/40 shadow-slate-900/5 group-hover:border-indigo-500 dark:group-hover:border-indigo-400"
                     }`}
-                  />
+                  >
+                    {getStepperIcon(exp)}
+
+                    {/* Live Pulse Beacon for Current Role */}
+                    {exp.isCurrent && (
+                      <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
+                      </span>
+                    )}
+                  </div>
                 </div>
+
+                {/* Horizontal Connector Arm linking Node to Card */}
+                <div
+                  className={`absolute left-[-34px] sm:left-[-48px] top-[42px] sm:top-[46px] w-[34px] sm:w-[48px] h-[2px] transition-all duration-300 pointer-events-none ${
+                    isCareerBreak
+                      ? "bg-gradient-to-r from-amber-400 to-amber-200 dark:from-amber-500 dark:to-slate-700 group-hover:h-[2.5px]"
+                      : exp.isCurrent
+                      ? "bg-gradient-to-r from-indigo-500 to-indigo-200 dark:from-indigo-400 dark:to-slate-700 group-hover:h-[2.5px]"
+                      : "bg-gradient-to-r from-indigo-300 dark:from-indigo-600 to-slate-200 dark:to-slate-700 group-hover:from-indigo-500 group-hover:h-[2.5px]"
+                  }`}
+                />
 
                 {/* Experience Card */}
                 <div
@@ -163,8 +192,8 @@ export default function Experience() {
                     </div>
                   </div>
 
-                  {/* Impact Metric Highlight Callouts (Recruiter Quick-Scan) */}
-                  {exp.highlights && exp.highlights.length > 0 && (
+                  {/* Impact Metric Highlight Callouts (Temporarily commented out) */}
+                  {/* {exp.highlights && exp.highlights.length > 0 && (
                     <div className="grid grid-cols-3 gap-2 sm:gap-3 my-6 pt-4 pb-4 border-y border-slate-100 dark:border-slate-700/60">
                       {exp.highlights.map((h, i) => (
                         <div
@@ -186,7 +215,7 @@ export default function Experience() {
                         </div>
                       ))}
                     </div>
-                  )}
+                  )} */}
 
                   {/* Bullet Points with Clean Styling */}
                   <ul className="mt-4 space-y-3">

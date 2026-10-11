@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { PERSONAL_INFO } from "@/data/portfolio";
 import {
   Mail,
@@ -10,6 +11,10 @@ import {
   Check,
   Copy,
   Sparkles,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  X,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon, LeetcodeIcon } from "@/components/Icons";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -22,7 +27,21 @@ export default function Contact() {
     subject: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [botcheck, setBotcheck] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<{
+    type: "success" | "error";
+    title: string;
+    message: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
@@ -30,16 +49,69 @@ export default function Contact() {
     setTimeout(() => setCopiedField(null), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const mailtoUrl = `mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(
-      formState.subject || `Inquiry from ${formState.name}`
-    )}&body=${encodeURIComponent(
-      `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`
-    )}`;
-    window.location.href = mailtoUrl;
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setIsSubmitting(true);
+
+    try {
+      const accessKey =
+        process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+        "78c8c539-d214-4364-9c36-5306f0b2719a";
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formState.name.trim(),
+          email: formState.email.trim(),
+          subject:
+            formState.subject.trim() ||
+            `Portfolio Inquiry from ${formState.name.trim()}`,
+          message: formState.message.trim(),
+          from_name: `${formState.name.trim()} (Portfolio)`,
+          botcheck,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setToast({
+          type: "success",
+          title: "Message Delivered!",
+          message:
+            data.message ||
+            "Thank you! Your message has been sent successfully. I'll get back to you soon.",
+        });
+        setFormState({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        setToast({
+          type: "error",
+          title: "Unable to Send",
+          message:
+            data.message ||
+            "Failed to deliver message. Please try again or reach out via email.",
+        });
+      }
+    } catch {
+      setToast({
+        type: "error",
+        title: "Network Error",
+        message:
+          "A network error occurred. Please check your connection or reach out via direct email.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -196,7 +268,7 @@ export default function Contact() {
                 Send a Direct Message
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                Fill in your query and it will automatically launch your mail client with everything filled in.
+                Fill in the form below and your message will be delivered directly to my inbox.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -262,24 +334,100 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* Hidden spam protection honeypot */}
+                <input
+                  type="text"
+                  name="botcheck"
+                  value={botcheck}
+                  onChange={(e) => setBotcheck(e.target.value)}
+                  className="hidden"
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm transition-all duration-150 hover:scale-[1.01] active:scale-95 text-sm cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-65 disabled:cursor-not-allowed shadow-sm transition-all duration-150 hover:scale-[1.01] active:scale-95 text-sm cursor-pointer"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Sending Message...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </button>
-
-                {submitted && (
-                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-xs text-center font-medium animate-in fade-in">
-                    Thank you! Your email client has been launched with your message.
-                  </div>
-                )}
               </form>
             </div>
           </ScrollReveal>
         </div>
       </div>
+
+      {/* Floating Auto-dismissing Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.2 } }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className={`fixed bottom-6 right-6 z-50 max-w-sm sm:max-w-md w-[calc(100vw-3rem)] p-4 rounded-2xl backdrop-blur-xl border shadow-2xl overflow-hidden flex items-start gap-3.5 ${
+              toast.type === "success"
+                ? "bg-white/95 dark:bg-slate-900/95 border-emerald-300 dark:border-emerald-500/30 shadow-emerald-500/10 text-slate-900 dark:text-slate-100"
+                : "bg-white/95 dark:bg-slate-900/95 border-rose-300 dark:border-rose-500/30 shadow-rose-500/10 text-slate-900 dark:text-slate-100"
+            }`}
+            role="status"
+            aria-live="polite"
+          >
+            <div
+              className={`p-2 rounded-xl shrink-0 ${
+                toast.type === "success"
+                  ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400"
+                  : "bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400"
+              }`}
+            >
+              {toast.type === "success" ? (
+                <CheckCircle2 className="w-5 h-5" />
+              ) : (
+                <AlertCircle className="w-5 h-5" />
+              )}
+            </div>
+
+            <div className="flex-1 pr-2 pt-0.5">
+              <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {toast.title}
+              </h4>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
+                {toast.message}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setToast(null)}
+              className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close notification"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Auto-dismiss countdown progress bar */}
+            <motion.div
+              initial={{ width: "100%" }}
+              animate={{ width: "0%" }}
+              transition={{ duration: 5, ease: "linear" }}
+              className={`absolute bottom-0 left-0 h-1 ${
+                toast.type === "success" ? "bg-emerald-500" : "bg-rose-500"
+              }`}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

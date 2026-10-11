@@ -31,8 +31,8 @@ export default function Projects() {
             Real-world systems, AI architectures, and high-scale enterprise platforms demonstrating engineering rigor and production stability.
           </p>
 
-          {/* Filter Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+          {/* Filter Tabs (Temporarily commented out) */}
+          {/* <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -46,7 +46,7 @@ export default function Projects() {
                 {cat}
               </button>
             ))}
-          </div>
+          </div> */}
         </ScrollReveal>
 
         {/* Project Cards Grid with Smooth Staggered Entrance */}
